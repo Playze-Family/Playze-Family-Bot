@@ -18,7 +18,8 @@ import java.sql.SQLException;
 
 public class DatabaseController extends IComponent implements Controller<DatabaseController> {
 
-    public static final int MAX_CONNECTIONS_ATTEMPTS = 5;
+    public static final int RECONNECTION_MAX_ATTEMPTS = 5;
+    public static final int RECONNECTION_SLEEP_TIMEOUT = 3;
 
     @NotNull @Getter private final HikariConfig hikariConfig;
     @NotNull @Getter private final HikariDataSource hikariDataSource;
@@ -55,16 +56,16 @@ public class DatabaseController extends IComponent implements Controller<Databas
     public Connection getConnection() {
         int attempts = 0;
 
-        while (attempts < MAX_CONNECTIONS_ATTEMPTS) {
+        while (attempts < RECONNECTION_MAX_ATTEMPTS) {
             try {
                 return hikariDataSource.getConnection();
             } catch (SQLException sqlException) {
                 attempts++;
 
-                logger.error("Unable to recover the connection to the database, launching a new attempt in 2 seconds...");
+                logger.error("Unable to recover the connection to the database, launching a new attempt in {} seconds...", RECONNECTION_SLEEP_TIMEOUT);
 
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(RECONNECTION_SLEEP_TIMEOUT * 1000);
                 } catch (InterruptedException interruptedException) {
                     Thread.currentThread().interrupt();
 
