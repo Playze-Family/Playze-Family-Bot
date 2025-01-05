@@ -9,6 +9,7 @@ import fr.jielos.playzefamilybot.config.ConfigController;
 import fr.jielos.playzefamilybot.database.function.SQLFunction;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.naming.ConfigurationException;
 import java.sql.Connection;
@@ -39,14 +40,14 @@ public class DatabaseController extends IComponent implements Controller<Databas
 
     @NotNull
     private DatabaseCredentials retrieveDatabaseCredentials(@NotNull ConfigController configController) throws ConfigurationException {
-        final String host = configController.retrieveValue("db.host");
-        final String username = configController.retrieveValue("db.username");
-        final String password = configController.retrieveValue("db.password");
-        final String name = configController.retrieveValue("db.name");
-        final int maxPoolSize = configController.retrieveInt("db.maxPoolSize");
+        @Nullable final String host = configController.getString("db.host");
+        @Nullable final String username = configController.getString("db.username");
+        @Nullable final String password = configController.getString("db.password");
+        @Nullable final String name = configController.getString("db.name");
+        final int maxPoolSize = configController.getInt("db.maxPoolSize");
 
-        if(host == null || username == null || password == null || name == null) {
-            throw new ConfigurationException("Unable to retrieve the database connection credentials from the configuration, check it.");
+        if(host == null || username == null || password == null || name == null || maxPoolSize <= 0) {
+            throw new ConfigurationException("Unable to retrieve the database connection credentials from the configuration, check it. Remember to set maxPoolSize to 1 at least.");
         }
 
         return new DatabaseCredentials(host, username, password, name, maxPoolSize, 3306);

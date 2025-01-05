@@ -50,10 +50,10 @@ public class PlayzeFamilyBot {
         this.configController = new ConfigController(this, System.getProperty("config")).load();
         this.databaseController = new DatabaseController(this, configController).load();
 
-        this.clientToken = configController.retrieveValue("client.token");
-        this.clientID = configController.retrieveValue("client.token");
+        this.clientToken = configController.getString("client.token");
+        this.clientID = configController.getString("client.id");
 
-        this.api = this.createDefaultClient().awaitReady();
+        this.api = this.createDefaultJDA().awaitReady();
         this.eventWaiter = new EventWaiter();
 
         this.eventsController = new EventsController(this, api).load(eventWaiter);
@@ -66,7 +66,8 @@ public class PlayzeFamilyBot {
         logger.info("Application startup completed successfully.");
     }
 
-    private JDA createDefaultClient() {
+    @NotNull
+    private JDA createDefaultJDA() {
         Checks.notNull(clientToken, "No client token provided.");
         Checks.notNull(clientID, "No client id provided.");
 

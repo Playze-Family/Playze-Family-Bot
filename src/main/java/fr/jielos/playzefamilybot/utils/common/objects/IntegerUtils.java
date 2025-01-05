@@ -13,7 +13,7 @@ public class IntegerUtils {
 
     public static int parseInt(@Nullable String value) {
         try {
-            Checks.notNull(value, "Value");
+            Checks.notNull(value, "Cannot parse null value to integer !");
 
             return Integer.parseInt(value);
         } catch (Exception exception) {
@@ -26,11 +26,6 @@ public class IntegerUtils {
         NUMBER_FORMATTER.setMaximumFractionDigits(digits);
 
         return NUMBER_FORMATTER.format(integer);
-    }
-
-    @NotNull
-    public static String formatNumber(double integer) {
-        return formatNumber(integer, 1);
     }
 
     @NotNull

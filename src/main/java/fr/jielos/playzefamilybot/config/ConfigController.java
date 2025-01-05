@@ -59,12 +59,12 @@ public class ConfigController extends IComponent implements Controller<ConfigCon
     }
 
     @Nullable
-    public String retrieveValue(@NotNull String key) {
+    public String getString(@NotNull String key) {
         return properties.getProperty(key, null);
     }
 
-    public int retrieveInt(@NotNull String key) {
-        return IntegerUtils.parseInt(retrieveValue(key));
+    public int getInt(@NotNull String key) {
+        return IntegerUtils.parseInt(getString(key));
     }
 
 }
