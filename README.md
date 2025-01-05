@@ -9,7 +9,7 @@ Application Discord publique développé au sein du serveur communautaire du str
 - Jeux
 - Modération et Outils
 
-## Languages prises en charge
+## Langages prises en charge
 - Français
 
 ## Liens
