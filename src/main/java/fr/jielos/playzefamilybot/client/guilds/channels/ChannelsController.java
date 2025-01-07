@@ -63,6 +63,6 @@ public class ChannelsController extends GuildComponent implements Controller<Cha
     }
 
     public boolean canManageChannels(@NotNull Member member, @NotNull GuildChannel... channels) {
-        return member.hasPermission(Permission.MANAGE_CHANNEL) && Arrays.stream(channels).filter(Objects::nonNull).noneMatch(channel -> channel.getPermissionContainer().getMemberPermissionOverrides().stream().anyMatch(po -> Objects.equals(po.getMember(), member) && po.getDenied().contains(Permission.MANAGE_CHANNEL)));
+        return member.hasPermission(Permission.MANAGE_CHANNEL) && Arrays.stream(channels).filter(Objects::nonNull).noneMatch(channel -> guild.getAfkChannel() != channel && channel.getPermissionContainer().getMemberPermissionOverrides().stream().anyMatch(po -> Objects.equals(po.getMember(), member) && po.getDenied().contains(Permission.MANAGE_CHANNEL)));
     }
 }
