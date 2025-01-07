@@ -43,19 +43,20 @@ public class ChannelsController extends GuildComponent implements Controller<Cha
         @NotNull final Member member = event.getMember();
 
         @Nullable final AudioChannel creatorChannel = settingsController.retrieveSetting(GuildSetting.GUILD_PUBLIC_VOICE_CHANNELS_CREATOR);
-        if(creatorChannel == null) return;
+        @Nullable final String creatorChannelName = settingsController.retrieveSetting(GuildSetting.GUILD_PUBLIC_VOICE_CHANNELS_NAME);
+        if(creatorChannel == null || creatorChannelName == null) return;
 
         @Nullable final AudioChannel leftChannel = event.getOldValue();
         @Nullable final AudioChannel joinChannel = event.getNewValue();
         if(!canManageChannels(selfMember, joinChannel)) return;
 
         if(joinChannel != null && joinChannel == creatorChannel) {
-            joinChannel.createCopy().setName(Objects.requireNonNull(settingsController.retrieveSetting(GuildSetting.GUILD_PUBLIC_VOICE_CHANNELS_NAME))).queue(newChannel -> {
+            joinChannel.createCopy().setName(creatorChannelName).queue(newChannel -> {
                 guild.moveVoiceMember(member, (AudioChannel) newChannel).queue();
             });
         }
 
-        if(leftChannel != null && leftChannel != guild.getAfkChannel() && leftChannel != creatorChannel) {
+        if(leftChannel != null && leftChannel.getName().equals(creatorChannelName) && leftChannel != creatorChannel) {
             if(leftChannel.getMembers().isEmpty()) {
                 leftChannel.delete().queue();
             }
