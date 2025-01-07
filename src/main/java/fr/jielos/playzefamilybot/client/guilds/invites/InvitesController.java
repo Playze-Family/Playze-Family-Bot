@@ -55,7 +55,7 @@ public class InvitesController extends GuildComponent implements Controller<Invi
 
     @Override
     public boolean hasPermissions() {
-        return selfMember.hasPermission(Permission.MANAGE_CHANNEL);
+        return selfMember.hasPermission(Permission.MANAGE_SERVER);
     }
 
     @Nullable
