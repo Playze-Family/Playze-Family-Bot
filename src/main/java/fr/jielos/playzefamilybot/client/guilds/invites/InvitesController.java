@@ -101,7 +101,7 @@ public class InvitesController extends GuildComponent implements Controller<Invi
             if(targetChannel != null) {
                 @NotNull final StringJoiner newMemberMessage = new StringJoiner(" ");
 
-                newMemberMessage.add(String.format("> Bienvenue à %s sur le serveur, nous sommes désormais **%s membres** !", member.getAsMention(), IntegerUtils.formatNumberWithEmojis(clientCache.getPresenceController().getTotalHumans())));
+                newMemberMessage.add(String.format("> Bienvenue à %s sur le serveur, nous sommes désormais **%s membres** !", member.getAsMention(), IntegerUtils.formatNumberWithEmojis(guild.getMemberCount())));
                 if(inviterUser != null) newMemberMessage.add(String.format("Remercions @**%s** pour l'avoir invité !", inviterUser.getEffectiveName()));
 
                 targetChannel.sendMessage(newMemberMessage.add(":confetti_ball:").toString()).queue();
