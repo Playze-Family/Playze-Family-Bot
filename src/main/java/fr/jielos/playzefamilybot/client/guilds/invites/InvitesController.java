@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.invite.GenericGuildInviteEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.requests.RestAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,7 @@ public class InvitesController extends GuildComponent implements Controller<Invi
     public InvitesController(@NotNull GuildCache guildCache, @NotNull SettingsController settingsController, @NotNull MembersController membersController) {
         super(guildCache);
 
-        this.invites = hasPermissions() ? guild.retrieveInvites().complete() : new ArrayList<>();
+        this.invites = retrieveInvites().join();
 
         this.settingsController = settingsController;
         this.membersController = membersController;
@@ -58,6 +59,11 @@ public class InvitesController extends GuildComponent implements Controller<Invi
         return selfMember.hasPermission(Permission.MANAGE_SERVER);
     }
 
+    @NotNull
+    public CompletableFuture<List<Invite>> retrieveInvites() {
+        return hasPermissions() ? guild.retrieveInvites().submit() : CompletableFuture.completedFuture(new ArrayList<>());
+    }
+
     @Nullable
     public Invite retrieveLastInviteUsed(@NotNull List<Invite> oldInvites, @NotNull List<Invite> newInvites) {
         return newInvites.stream().filter(oldInvites::contains).filter(anNewInvite -> {
@@ -68,7 +74,7 @@ public class InvitesController extends GuildComponent implements Controller<Invi
 
     @Override
     public void onGenericGuildInvite(@NotNull GenericGuildInviteEvent event) {
-        guild.retrieveInvites().queue(newInvites -> {
+        this.retrieveInvites().thenAccept(newInvites -> {
             this.invites = newInvites;
         });
     }
@@ -81,7 +87,7 @@ public class InvitesController extends GuildComponent implements Controller<Invi
         @NotNull final Member member = event.getMember();
         if(member.getUser().isBot()) return;
 
-        guild.retrieveInvites().queue(newInvites -> {
+        this.retrieveInvites().thenAccept(newInvites -> {
             this.invites = newInvites;
 
             @Nullable final Invite lastInviteUsed = this.retrieveLastInviteUsed(invites, newInvites);
