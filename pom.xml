@@ -6,7 +6,7 @@
 
     <groupId>fr.jielos.playzefamilybot</groupId>
     <artifactId>playzefamily-bot</artifactId>
-    <version>5.1.0-SNAPSHOT</version>
+    <version>5.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>PlayzeFamilyBot</name>

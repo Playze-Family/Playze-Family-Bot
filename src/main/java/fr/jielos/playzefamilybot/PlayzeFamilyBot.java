@@ -73,7 +73,7 @@ public class PlayzeFamilyBot {
 
         return JDABuilder.create(clientToken, GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
                 .setStatus(OnlineStatus.IDLE)
-                .setActivity(Activity.playing("Notre agent virtuel se déploie en mode furtif. Préparez-vous à pénétrer le monde secret de la conversation automatisée."))
+                .setActivity(Activity.playing("Notre agent virtuel se déploie en mode furtif. Préparez-vous à pénétrer le monde secret de la conversation automatisée !"))
                 .build();
     }
 
