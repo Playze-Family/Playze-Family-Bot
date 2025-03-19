@@ -62,7 +62,7 @@ public class LevelsController extends GuildComponent implements Controller<Level
         instance.getCommandsController().registerCommandAdapter(new CommandRewards(guildCache, this));
         instance.getCommandsController().registerCommandAdapter(new CommandXP(guildCache, this));
 
-        return Controller.super.load();
+        return this;
     }
 
     private void loadRewards() {

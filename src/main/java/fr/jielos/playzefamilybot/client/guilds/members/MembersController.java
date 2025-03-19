@@ -29,7 +29,7 @@ public class MembersController extends GuildComponent implements Controller<Memb
         instance.getCommandsController().registerCommandAdapter(new CommandInvites(guildCache, this));
         instance.getCommandsController().registerCommandAdapter(new CommandCustomrank(guildCache, this));
 
-        return Controller.super.load();
+        return this;
     }
 
     @NotNull

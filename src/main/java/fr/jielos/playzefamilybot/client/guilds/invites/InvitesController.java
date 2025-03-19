@@ -51,7 +51,7 @@ public class InvitesController extends GuildComponent implements Controller<Invi
     public InvitesController load() {
         instance.getEventsController().registerEventAdapter(this);
 
-        return Controller.super.load();
+        return this;
     }
 
     @Override

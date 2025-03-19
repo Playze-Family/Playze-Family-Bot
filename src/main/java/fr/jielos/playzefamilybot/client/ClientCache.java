@@ -2,6 +2,7 @@ package fr.jielos.playzefamilybot.client;
 
 import fr.jielos.playzefamilybot.PlayzeFamilyBot;
 import fr.jielos.playzefamilybot.api.APIComponent;
+import fr.jielos.playzefamilybot.api.managers.Controller;
 import fr.jielos.playzefamilybot.client.guilds.GuildsController;
 import fr.jielos.playzefamilybot.client.presence.PresenceController;
 import fr.jielos.playzefamilybot.client.users.UsersController;
@@ -9,7 +10,7 @@ import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientCache extends APIComponent {
+public class ClientCache extends APIComponent implements Controller<ClientCache> {
 
     @Getter @NotNull private final PresenceController presenceController;
 
@@ -25,4 +26,12 @@ public class ClientCache extends APIComponent {
         this.guildsController = new GuildsController(this).load();
     }
 
+    @NotNull
+    @Override
+    public ClientCache load() {
+        presenceController.update();
+        instance.getCommandsController().deleteUnregisteredCommands();
+
+        return this;
+    }
 }

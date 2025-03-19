@@ -1,5 +1,6 @@
 package fr.jielos.playzefamilybot.client.presence;
 
+import fr.jielos.playzefamilybot.PlayzeFamilyBot;
 import fr.jielos.playzefamilybot.api.managers.Controller;
 import fr.jielos.playzefamilybot.client.ClientCache;
 import fr.jielos.playzefamilybot.client.ClientComponent;
@@ -29,10 +30,12 @@ public class PresenceController extends ClientComponent implements Controller<Pr
     public PresenceController load() {
         instance.getEventsController().registerEventAdapter(this);
 
-        return Controller.super.load("Client connected on Discord under the following account: @{}.", api.getSelfUser().getEffectiveName());
+        PlayzeFamilyBot.getLogger().info("Client connected on Discord under the following account: @{}.", api.getSelfUser().getEffectiveName());
+
+        return this;
     }
 
-    public void updatePresence() {
+    public void update() {
         presence.setStatus(OnlineStatus.ONLINE);
         presence.setActivity(Activity.streaming(String.format(READY_STATUS_FORMAT, getTotalHumans()), ObjectUtils.EXTERNAL_STREAM_URL));
 
@@ -46,11 +49,11 @@ public class PresenceController extends ClientComponent implements Controller<Pr
 
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
-        updatePresence();
+        update();
     }
 
     @Override
     public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
-        updatePresence();
+        update();
     }
 }

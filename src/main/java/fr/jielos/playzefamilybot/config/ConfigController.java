@@ -27,7 +27,9 @@ public class ConfigController extends IComponent implements Controller<ConfigCon
 
     @NotNull
     public ConfigController load() {
-        return Controller.super.load("Loading of current client configuration completed!");
+        PlayzeFamilyBot.getLogger().info(("Loading of current client configuration completed!"));
+
+        return this;
     }
 
     @NotNull

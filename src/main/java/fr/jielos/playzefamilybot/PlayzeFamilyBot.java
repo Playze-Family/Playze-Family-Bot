@@ -56,12 +56,10 @@ public class PlayzeFamilyBot {
         this.api = this.createDefaultJDA().awaitReady();
         this.eventWaiter = new EventWaiter();
 
-        this.eventsController = new EventsController(this, api).load(eventWaiter);
+        this.eventsController = new EventsController(this, api).add(eventWaiter).load();
         this.commandsController = new CommandsController(this, api, eventsController).load();
 
-        this.clientCache = new ClientCache(this, api);
-        this.clientCache.getPresenceController().updatePresence();
-        this.clientCache.getInstance().getCommandsController().deleteUnregisteredCommands();
+        this.clientCache = new ClientCache(this, api).load();
 
         logger.info("Application startup completed successfully.");
     }

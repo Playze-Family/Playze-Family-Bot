@@ -42,7 +42,9 @@ public class CommandsController extends APIComponent implements Controller<Comma
     public CommandsController load() {
         eventsController.registerEventAdapter(this);
 
-        return Controller.super.load("Successful loading of Commands controller.");
+        PlayzeFamilyBot.getLogger().info("Successful loading of Commands controller.");
+
+        return this;
     }
 
     public void deleteUnregisteredCommands() {

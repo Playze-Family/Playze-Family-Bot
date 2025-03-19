@@ -12,10 +12,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.naming.ConfigurationException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class DatabaseController extends IComponent implements Controller<DatabaseController> {
 
@@ -35,7 +41,15 @@ public class DatabaseController extends IComponent implements Controller<Databas
     @NotNull
     @Override
     public DatabaseController load() {
-        return Controller.super.load("Successful database credentials loaded !");
+        try {
+            this.executeSchema(Objects.requireNonNull(getClass().getResourceAsStream("/database/ini.sql"), "Can't find initialization SQL schema."));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        PlayzeFamilyBot.getLogger().info("Successful loading of Database controller !");
+
+        return this;
     }
 
     @NotNull
@@ -108,6 +122,26 @@ public class DatabaseController extends IComponent implements Controller<Databas
                 throw new RuntimeException(String.format("Unable to execute SQL update: %s", sql), exception);
             }
         }, objects);
+    }
+
+    public void executeSchema(@NotNull InputStream inputStream) throws IOException {
+        @NotNull final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        @NotNull final StringBuilder sqlBuilder = new StringBuilder();
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if(line.startsWith("--") || line.startsWith("#")) continue;
+
+            sqlBuilder.append(line).append("\n");
+
+            if(line.trim().endsWith(";")) {
+                this.executeUpdate(sqlBuilder.toString());
+
+                sqlBuilder.setLength(0);
+            }
+        }
+
+        reader.close();
     }
 
 }

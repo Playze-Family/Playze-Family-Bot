@@ -1,5 +1,6 @@
 package fr.jielos.playzefamilybot.client.users;
 
+import fr.jielos.playzefamilybot.PlayzeFamilyBot;
 import fr.jielos.playzefamilybot.api.managers.Controller;
 import fr.jielos.playzefamilybot.client.ClientCache;
 import fr.jielos.playzefamilybot.client.ClientComponent;
@@ -26,7 +27,9 @@ public class UsersController extends ClientComponent implements Controller<Users
     public UsersController load() {
         instance.getEventsController().registerEventAdapter(this);
 
-        return Controller.super.load("Successful loading of Users controller.");
+        PlayzeFamilyBot.getLogger().info("Successful loading of Users controller.");
+
+        return this;
     }
 
     @NotNull

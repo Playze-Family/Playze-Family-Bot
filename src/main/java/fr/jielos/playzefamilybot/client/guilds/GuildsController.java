@@ -1,5 +1,6 @@
 package fr.jielos.playzefamilybot.client.guilds;
 
+import fr.jielos.playzefamilybot.PlayzeFamilyBot;
 import fr.jielos.playzefamilybot.api.managers.Controller;
 import fr.jielos.playzefamilybot.client.ClientCache;
 import fr.jielos.playzefamilybot.client.ClientComponent;
@@ -30,7 +31,9 @@ public class GuildsController extends ClientComponent implements Controller<Guil
 
         instance.getEventsController().registerEventAdapter(this);
 
-        return Controller.super.load("Successful loading of Guilds controller.");
+        PlayzeFamilyBot.getLogger().info("Successful loading of Guilds controller.");
+
+        return this;
     }
 
     @NotNull

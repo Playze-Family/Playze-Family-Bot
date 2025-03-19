@@ -32,7 +32,7 @@ public class ChannelsController extends GuildComponent implements Controller<Cha
     public ChannelsController load() {
         instance.getEventsController().registerEventAdapter(this);
 
-        return Controller.super.load();
+        return this;
     }
 
     @Override

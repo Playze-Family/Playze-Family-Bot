@@ -20,12 +20,19 @@ public class EventsController extends APIComponent implements Controller<EventsC
     }
 
     @NotNull
-    public EventsController load(@NotNull Object... eventListeners) {
+    public EventsController add(@NotNull Object... eventListeners) {
         for(@NotNull final Object eventListener : eventListeners) {
             this.registerEventAdapter(eventListener);
         }
 
-        return Controller.super.load("Successful loading of Listeners controller.");
+        return this;
+    }
+
+    @NotNull
+    public EventsController load() {
+        PlayzeFamilyBot.getLogger().info("Successful loading of Listeners controller.");
+
+        return this;
     }
 
     public void registerEventAdapter(@NotNull Object listener) {
@@ -35,4 +42,5 @@ public class EventsController extends APIComponent implements Controller<EventsC
     public void handleEvent(@NotNull GenericEvent event) {
         eventManager.handle(event);
     }
+
 }

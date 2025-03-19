@@ -53,7 +53,7 @@ public class SettingsController extends GuildComponent implements Controller<Set
         instance.getCommandsController().registerCommandAdapter(new CommandSettings(guildCache, this));
         instance.getCommandsController().registerCommandAdapter(new CommandStats(guildCache, this));
 
-        return Controller.super.load();
+        return this;
     }
 
     @Nullable

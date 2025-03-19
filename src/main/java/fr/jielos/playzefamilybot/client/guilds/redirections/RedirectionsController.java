@@ -41,7 +41,7 @@ public class RedirectionsController extends GuildComponent implements Controller
     public RedirectionsController load() {
         instance.getEventsController().registerEventAdapter(this);
 
-        return Controller.super.load();
+        return this;
     }
 
     @Override
