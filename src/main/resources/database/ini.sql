@@ -1,6 +1,6 @@
 -- playze_family_bot.guilds_levels_rewards definition
 
-CREATE TABLE `guilds_levels_rewards` (
+CREATE TABLE IF NOT EXISTS `guilds_levels_rewards` (
   `guild_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `level` int NOT NULL,
   `role_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `guilds_levels_rewards` (
 
 -- playze_family_bot.guilds_members_custom_ranks definition
 
-CREATE TABLE `guilds_members_custom_ranks` (
+CREATE TABLE IF NOT EXISTS `guilds_members_custom_ranks` (
   `guild_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `member_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `role_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE `guilds_members_custom_ranks` (
 
 -- playze_family_bot.guilds_members_invites definition
 
-CREATE TABLE `guilds_members_invites` (
+CREATE TABLE IF NOT EXISTS `guilds_members_invites` (
   `guild_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `member_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `total` int NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `guilds_members_invites` (
 
 -- playze_family_bot.guilds_members_invites_history definition
 
-CREATE TABLE `guilds_members_invites_history` (
+CREATE TABLE IF NOT EXISTS `guilds_members_invites_history` (
   `guild_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `member_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `invited_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `guilds_members_invites_history` (
 
 -- playze_family_bot.guilds_members_profiles definition
 
-CREATE TABLE `guilds_members_profiles` (
+CREATE TABLE IF NOT EXISTS `guilds_members_profiles` (
   `guild_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `member_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `level` int NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE `guilds_members_profiles` (
 
 -- playze_family_bot.guilds_settings definition
 
-CREATE TABLE `guilds_settings` (
+CREATE TABLE IF NOT EXISTS `guilds_settings` (
   `guild_id` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
   `setting_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
