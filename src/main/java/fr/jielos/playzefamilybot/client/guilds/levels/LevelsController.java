@@ -262,7 +262,7 @@ public class LevelsController extends GuildComponent implements Controller<Level
         return channel.retrieveMessageById(messageReaction.getMessageId()).submit()
                 .thenApply(message -> {
                     if(message.getMentions().mentionsEveryone()) return true;
-                    if(message.getAuthor().isBot() && message.getInteraction() == null && message.getType() == MessageType.INLINE_REPLY) return true;
+                    if(message.getAuthor().isBot()) return true;
 
                     return false;
                 });
