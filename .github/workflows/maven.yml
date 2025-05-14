@@ -37,7 +37,7 @@ jobs:
         echo "🔁 Suppression du service distant existant..."
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST <<EOF
         systemctl stop $SERVICE_NAME.service
-        mv $SERVICE_PATH/$SERVICE_NAME-* $SERVICE_PATH/archives/
+        rm -f $SERVICE_PATH/$SERVICE_NAME-*.jar
         EOF
         
         echo "📦 Upload du nouveau build..."
