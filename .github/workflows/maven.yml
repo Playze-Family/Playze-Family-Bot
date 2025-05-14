@@ -1,26 +1,53 @@
-name: Build and test with Maven
+name: Build
 
 on:  
   push:
-    branches:
-      - main
-  pull_request:
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GAMMA_KEY: ${{ secrets.GAMMA_KEY }}
+      GAMMA_HOST: ${{ secrets.GAMMA_HOST }}
+      GAMMA_USER: ${{ secrets.GAMMA_USER }}
+
+    environment:
+      name: ${{ github.ref_name }}
+
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 21
+
+    - name: Set up Java
       uses: actions/setup-java@v4
       with:
         java-version: 21
-        distribution: 'temurin'
+        distribution: temurin
         cache: maven
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: playzefamily-bot-${{ github.sha }}
-        path: target/playzefamily-bot-*.jar
+
+    - name: Deploy to Server
+      run: |
+        echo "⚙️ Setup GAMMA SSH Key"
+        mkdir -p ~/.ssh 
+        echo "$GAMMA_KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+        
+        echo "🔁 Suppression du service distant existant..."
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST <<EOF
+        systemctl stop $SERVICE_NAME.service
+        mv $SERVICE_PATH/$SERVICE_NAME-* $SERVICE_PATH/archives/
+        EOF
+        
+        echo "📦 Upload du nouveau build..."
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no target/$SERVICE_NAME-*.jar $GAMMA_USER@$GAMMA_HOST:$SERVICE_PATH
+        
+        echo "♻️ Redémarrage du service..."
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST <<EOF
+        sudo systemctl restart $SERVICE_NAME.service
+        EOF
+
+      env:
+        SERVICE_NAME: ${{ vars.SERVICE_NAME }}
+        SERVICE_PATH: ${{ vars.SERVICE_PATH }}
