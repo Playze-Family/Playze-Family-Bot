@@ -35,18 +35,13 @@ jobs:
         echo "$GAMMA_KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
         
         echo "🔁 Suppression du service distant existant..."
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST <<EOF
-        systemctl stop $SERVICE_NAME.service
-        rm -f $SERVICE_PATH/$SERVICE_NAME-*.jar
-        EOF
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST "systemctl stop $SERVICE_NAME.service && rm -f $SERVICE_PATH/$SERVICE_NAME-*.jar"
         
         echo "📦 Upload du nouveau build..."
         scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no target/$SERVICE_NAME-*.jar $GAMMA_USER@$GAMMA_HOST:$SERVICE_PATH
         
         echo "♻️ Redémarrage du service..."
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST <<EOF
-        sudo systemctl restart $SERVICE_NAME.service
-        EOF
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $GAMMA_USER@$GAMMA_HOST "systemctl restart $SERVICE_NAME.service"
 
       env:
         SERVICE_NAME: ${{ vars.SERVICE_NAME }}
